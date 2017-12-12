@@ -18,6 +18,7 @@ app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
-//export PORT=3000
-//export CLIENT_URL=http://localhost:8080
-//export DATABSE_URL=postgres://localhost:5432/books_app
+// export PORT=3000
+// export CLIENT_URL=http://localhost:8080
+// export DATABASE_URL=postgres://localhost:5432/books_app
+// export DATABASE_URL=postgres://postgres:plokij09@localhost:5432/postgres
