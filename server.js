@@ -3,7 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
-
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -13,7 +13,8 @@ client.connect();
 client.on('error', err => console.error(err));
 
 app.use(cors());
-
+app.use(bodyParser.json());
+app.use(express.static('./book-list-server'));
 //app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 app.get('/api/v1/books', (req, res) => {
@@ -23,17 +24,12 @@ app.get('/api/v1/books', (req, res) => {
   .catch(console.error);
 });
 
-// app.get('/api/v1/books/:id', (req, res) => {
-//   client.query(`SELECT book_id FROM books`)
-//   .then(results => res.send(results.rows))
-//   .catch(console.error);
-// })
-
-// Book.fetchOne = (ctx, callback) =>
-//   $.get(`${__API_URL__}/api/v1/books/${ctx.params.book_id}`)
-//     .then(results => ctx.book = results[0])
-//     .then(callback)
-//     .catch(errorCallback);
+Book.fetchOne = (ctx, callback) => {
+  $.get(`${__API_URL__}/api/v1/books/${ctx.params.book_id}`)
+    .then(results => ctx.book = results[0])
+    .then(callback)
+    .catch(errorCallback);
+}
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
