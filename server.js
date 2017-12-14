@@ -3,7 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
-
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -13,7 +13,8 @@ client.connect();
 client.on('error', err => console.error(err));
 
 app.use(cors());
-
+app.use(bodyParser.json());
+app.use(express.static('./book-list-server'));
 //app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 app.get('/api/v1/books', (req, res) => {
@@ -23,7 +24,12 @@ app.get('/api/v1/books', (req, res) => {
   .catch(console.error);
 });
 
-
+Book.fetchOne = (ctx, callback) => {
+  $.get(`${__API_URL__}/api/v1/books/${ctx.params.book_id}`)
+    .then(results => ctx.book = results[0])
+    .then(callback)
+    .catch(errorCallback);
+}
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
@@ -31,4 +37,4 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 // export PORT=3000
 // export CLIENT_URL=http://localhost:8080
 // export DATABASE_URL=postgres://localhost:5432/books_app
-// export DATABASE_URL=postgres://postgres:plokij09@localhost:5432/postgres
+// export DATABASE_URL=postgres://postgres:plokij09@localhost:5432/books_app
