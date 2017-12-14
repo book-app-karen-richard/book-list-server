@@ -18,7 +18,7 @@ app.use(cors());
 
 app.get('/api/v1/books', (req, res) => {
   console.log('server side query');
-  client.query(`SELECT * FROM books`)
+  client.query(`SELECT * FROM books;`)
   .then(results => res.send(results.rows))
   .catch(console.error);
 });
