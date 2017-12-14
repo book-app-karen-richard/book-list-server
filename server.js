@@ -24,8 +24,9 @@ app.get('/api/v1/books', (req, res) => {
   .catch(console.error);
 });
 
-app.get('/api/v1/books', (req, res) => {
-  client.query(`SELECT * FROM books WHERE book_id=${req.params.id}`)
+app.get('/api/v1/books/:book_id', (req, res) => {
+  console.log('book query');
+  client.query(`SELECT * FROM books WHERE book_id=${req.params.book_id}`)
   .then(results => res.send(results.rows))
   .catch(console.error);
 });
