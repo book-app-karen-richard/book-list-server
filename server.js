@@ -14,22 +14,31 @@ client.on('error', err => console.error(err));
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('./book-list-server'));
 //app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
 
 app.get('/api/v1/books', (req, res) => {
-  console.log('server side query');
-  client.query(`SELECT * FROM books;`)
+  client.query(`SELECT book_id, title, author, image_url, isban FROM books;`)
   .then(results => res.send(results.rows))
   .catch(console.error);
 });
 
-Book.fetchOne = (ctx, callback) => {
-  $.get(`${__API_URL__}/api/v1/books/${ctx.params.book_id}`)
-    .then(results => ctx.book = results[0])
-    .then(callback)
-    .catch(errorCallback);
-}
+app.get('/api/v1/books', (req, res) => {
+  client.query(`SELECT * FROM books WHERE book_id=${req.params.id}`)
+  .then(results => res.send(results.rows))
+  .catch(console.error);
+});
+
+app.post('api/v1/books', (req, res) => {
+  client.query(`INSERT INTO books(title, author, isbn, image_url, description) VALUES ($1, $2, $3, $4, $5)`)
+  [ req.body.title,
+    req.bodyauthor,
+    req.body.isbn,
+    req.body.image_url,
+    req.body.description]
+});
+
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
