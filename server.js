@@ -24,13 +24,6 @@ app.get('/api/v1/books', (req, res) => {
   .catch(console.error);
 });
 
-Book.fetchOne = (ctx, callback) => {
-  $.get(`${__API_URL__}/api/v1/books/${ctx.params.book_id}`)
-    .then(results => ctx.book = results[0])
-    .then(callback)
-    .catch(errorCallback);
-}
-
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
