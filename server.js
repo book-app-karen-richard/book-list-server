@@ -31,17 +31,16 @@ app.get('/api/v1/books/:book_id', (req, res) => {
   .catch(console.error);
 });
 
-app.post('api/v1/books', (req, res) => {
-  client.query(`INSERT INTO books(title, author, isbn, image_url, description) VALUES ($1, $2, $3, $4, $5)`
-  [ req.body.title,
-    req.body.author,
-    req.body.isbn,
-    req.body.image_url,
-    req.body.description
-  ])
-  .then(() => response.send('Update complete'))
+app.post('api/v1/books', bodyParser, (req, res) => {
+  console.log('create query');
+  let {title, author, isbn, image_url, description} = req.body;
+  client.query(`INSERT INTO books(title, author, isbn, image_url, description) VALUES ($1, $2, $3, $4, $5)`,
+  [ title, author, isbn, image_url, description]
+)
+  .then(() => res.sendStatus(201))
   .catch(console.error);
 });
+
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
